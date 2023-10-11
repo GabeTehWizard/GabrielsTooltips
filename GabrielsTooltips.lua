@@ -1,7 +1,7 @@
 -- Title: GabrielsTooltips Addon for Wrath Classic
 -- Interface: 30402
 -- Version: 1.0
-
+local addonName, addon = ...
 
 -- Get the localized name of the player's class
 local _, class = UnitClass("player")
@@ -55,6 +55,7 @@ end
 
 local function UpdateTooltip()
     local numLines = GameTooltip:NumLines()
+    addon.Test1()
     -- Iterate through each line in the tooltip
     for i = 2, numLines do -- Start from the second line (the first line is the item's name)
         local line = _G["GameTooltipTextLeft" .. i] -- Get the line object
