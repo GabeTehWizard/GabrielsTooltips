@@ -1,0 +1,5 @@
+## Interface: 30402
+## Title: GabrielsTooltips
+## Notes: My test addon.
+## Version: 1
+GabrielsTooltips.lua
