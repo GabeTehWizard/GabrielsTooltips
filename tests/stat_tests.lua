@@ -1,9 +1,11 @@
 local addonName, addon = ...
 
-addon.Test1 = function()
-    print("doggy")
-end
+-- Returns a percent value based on the rating variable passed
+local function TestCalculatePercentStat1()
+    -- Arrange
 
-local function Test2()
-    print("Cats")
+    -- Act
+
+    -- Asset
+
 end

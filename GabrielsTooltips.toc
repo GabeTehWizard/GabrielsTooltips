@@ -3,7 +3,8 @@
 ## Notes: My test addon.
 ## Version: 1
 
-variables\class_variables.lua
-utilities\stat.lua
+variables\player.lua
+variables\stats.lua
+utilities\stats.lua
 tests\stat_tests.lua
 GabrielsTooltips.lua
