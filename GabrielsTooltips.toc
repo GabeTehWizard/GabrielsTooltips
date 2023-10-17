@@ -3,8 +3,13 @@
 ## Notes: My test addon.
 ## Version: 1
 
+utilities\custom_math.lua
 variables\player.lua
+variables\colors.lua
 variables\stats.lua
+utilities\spells.lua
+variables\spells.lua
 utilities\stats.lua
 tests\stat_tests.lua
+utilities\events.lua
 GabrielsTooltips.lua
