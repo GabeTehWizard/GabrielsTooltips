@@ -31,22 +31,76 @@ local function FormatStatPercent(aStatName, aStatValue)
 end
 
 local function UpdateTooltip()
-    print("tooltip")
+    local keywords = {
+        critical = true,
+        haste = true,
+        intellect = true,
+        spirit = true,
+        stamina = true,
+        hit = true,
+        spellpower = true, -- Include the specific keyword
+        armor = true,
+        mana = true,
+        defense = true,
+        hastepercent = true,
+    }
+
+    local data = {} -- Initialize the data table
+
     local numLines = GameTooltip:NumLines()
-    -- Iterate through each line in the tooltip
+    local tooltipText = ""
+
     for i = 2, numLines do -- Start from the second line (the first line is the item's name)
         local line = _G["GameTooltipTextLeft" .. i] -- Get the line object
         if line then
             local text = line:GetText()
             if text then
-                -- Use string patterns to extract the stat name and value
-                local stat, value = addonData.Utilities.ParseStatLine(text, addonData.Stats)
-                if stat ~= "" and value ~= nil then
-                    -- Replace the line with your modified text
-                    line:SetText(text .. " |cFFFFD700" .. FormatStatPercent(stat, value) .. "|r")
-                end
+                text = text:gsub("%.", "")
+                tooltipText = tooltipText .. text .. " " -- Append the line's text to the tooltipText
             end
         end
+    end
+
+    tooltipText = tooltipText:lower()
+	tooltipText = string.gsub( tooltipText, "|c%x%x%x%x%x%x%x%x", "" )
+	tooltipText = string.gsub( tooltipText, "|c%x%x %x%x%x%x%x", "" ) -- the trading parts colour has a space instead of a zero for some weird reason
+	tooltipText = string.gsub( tooltipText, "|r", "" )
+    tooltipText = string.gsub( tooltipText, "spell power", "spellpower")
+    tooltipText = string.gsub( tooltipText, "%d+ / %d+", "")
+    tooltipText = string.gsub( tooltipText, "haste rating by 340 for 12", "10 hastepercent")
+    tooltipText = string.gsub( tooltipText, "1 min cooldown", "")
+    tooltipText = string.gsub( tooltipText, "chance to restore mana", "")
+    tooltipText = string.gsub( tooltipText, "requires at least %d red gem", "")
+    tooltipText = string.gsub( tooltipText, "requires at least %d yellow gem", "")
+    tooltipText = string.gsub( tooltipText, "requires at least %d blue gem", "")
+    tooltipText = string.gsub( tooltipText, "2%% mana", "")
+    tooltipText = string.gsub( tooltipText, "3%% increased critical damage", "")
+    tooltipText = string.gsub( tooltipText, "1%% spell reflect", "")
+    tooltipText = string.gsub( tooltipText, "2%% intellect", "")
+    tooltipText = string.gsub( tooltipText, "%d*%%", "")
+    tooltipText = string.gsub( tooltipText, "per 5 seconds", "")
+    tooltipText = string.gsub( tooltipText, "requires level %d+", "")
+    tooltipText = string.gsub( tooltipText, "[^%w%s]", "")
+
+    local num = nil
+    local key = ""
+    for word in string.gmatch(tooltipText, "%S+") do
+
+        if keywords[word] then
+            key = word
+        elseif tonumber(word) then
+            num = tonumber(word)
+        end
+
+        if (num ~= nil and key ~= "") then
+            data[key] = data[key] and (data[key] + num) or num
+            key = ""
+            num = nil
+        end
+    end
+    addonData.Utilities.AdjustItemStats(data)
+    for keyword, value in pairs(data) do
+        GameTooltip:AddLine(keyword .. ": " .. value)
     end
 end
 

@@ -1,22 +1,11 @@
 -- Utility Methods for Stat Calculations
 local addonName, addon = ...
+local statTable = addon.Stats
+
 
 local function QueryTalentRank(tabIndex, talentIndex, inspect)
     local talentName, talentIcon, talentTier, talentColumn, talentSelected, talentAvailable = GetTalentInfo(tabIndex, talentIndex, inspect);
     return talentTier
-end
-
-local function QueryLineValue(line)
-    return tonumber(string.match(line, "%d+"))
-end
-
-local function ParseStatLine(line, combatStats)
-    for stat, _ in pairs(combatStats) do
-        if string.find(string.lower(line), stat) then
-            return stat, QueryLineValue(line)
-        end
-    end
-    return "", 0
 end
 
 local function CalcStatBase(num1, num2)
@@ -32,9 +21,31 @@ local function CalcStat(aStat, aStatValue)
     return 0, 0
 end
 
+local function AdjustItemStats(itemStatTable)
+    if itemStatTable["spirit"] then
+        itemStatTable["spellpower"] = itemStatTable["spellpower"] and (itemStatTable["spellpower"] + CalcStat(statTable["spirit"], itemStatTable["spirit"])) or CalcStat(statTable["spirit"], itemStatTable["spirit"])
+    end
+    if itemStatTable["intellect"] then
+        local mana, crit = CalcStat(statTable["intellect"], itemStatTable["intellect"])
+        itemStatTable["mana"] = mana
+        itemStatTable["critChance"] = crit
+    end
+    if itemStatTable["hit"] then
+        itemStatTable["hit"] = CalcStat(statTable["hit"], itemStatTable["hit"])
+    end
+    if itemStatTable["haste"] then
+        itemStatTable["haste"] = CalcStat(statTable["haste"], itemStatTable["haste"])
+    end
+    if itemStatTable["critical"] then
+        itemStatTable["critChance"] = itemStatTable["critChance"] and (itemStatTable["critChance"] + CalcStat(statTable["critical strike"], itemStatTable["critical"])) or CalcStat(statTable["critical strike"], itemStatTable["critical"])
+    end
+    if itemStatTable["stamina"] then
+        itemStatTable["health"] = CalcStat(statTable["stamina"], itemStatTable["stamina"])
+    end
+end
+
 addon.CalcStat = CalcStat
 addon.Utilities = {
-    QueryLineValue = QueryLineValue,
-    ParseStatLine = ParseStatLine,
     QueryTalentRank = QueryTalentRank,
+    AdjustItemStats = AdjustItemStats,
 }
