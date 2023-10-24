@@ -27,7 +27,7 @@ local function AdjustItemStats(itemStatTable)
     end
     if itemStatTable["intellect"] then
         local mana, crit = CalcStat(statTable["intellect"], itemStatTable["intellect"])
-        itemStatTable["mana"] = mana
+        itemStatTable["intellect"] = mana
         itemStatTable["critChance"] = crit
     end
     if itemStatTable["hit"] then
@@ -40,7 +40,10 @@ local function AdjustItemStats(itemStatTable)
         itemStatTable["critChance"] = itemStatTable["critChance"] and (itemStatTable["critChance"] + CalcStat(statTable["critical strike"], itemStatTable["critical"])) or CalcStat(statTable["critical strike"], itemStatTable["critical"])
     end
     if itemStatTable["stamina"] then
-        itemStatTable["health"] = CalcStat(statTable["stamina"], itemStatTable["stamina"])
+        itemStatTable["stamina"] = CalcStat(statTable["stamina"], itemStatTable["stamina"])
+    end
+    if itemStatTable["mana"] then
+        itemStatTable["mana"] = itemStatTable["mana"]
     end
 end
 
