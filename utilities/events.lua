@@ -30,6 +30,30 @@ local function FormatStatPercent(aStatName, aStatValue)
     end
 end
 
+local function PrintItemTooltipSummary(itemStatTable, aGameTooltip)
+    if itemStatTable["stamina"] then
+        aGameTooltip:AddLine("Health" .. ": " .. itemStatTable["stamina"])
+    end
+    if itemStatTable["intellect"] then
+        aGameTooltip:AddLine("Mana" .. ": " .. itemStatTable["mana"])
+    end
+    if itemStatTable["hit"] then
+        aGameTooltip:AddLine("Hit" .. ": " .. itemStatTable["hit"] .. "%")
+    end
+    if itemStatTable["haste"] then
+        aGameTooltip:AddLine("Haste" .. ": " .. itemStatTable["haste"] .. "%")
+    end
+    if itemStatTable["critical"] then
+        aGameTooltip:AddLine("Critical Chance" .. ": " .. itemStatTable["critChance"] .. "%")
+    end
+    if itemStatTable["spirit"] then
+        aGameTooltip:AddLine("Relative MP5" .. ": " .. "Coming soon#tm")
+    end
+    if itemStatTable["spellpower"] then
+        aGameTooltip:AddLine("Total Spell Power" .. ": " .. itemStatTable["spellpower"])
+    end
+end
+
 local function UpdateTooltip()
     local keywords = {
         critical = true,
@@ -99,10 +123,9 @@ local function UpdateTooltip()
         end
     end
     addonData.Utilities.AdjustItemStats(data)
-    for keyword, value in pairs(data) do
-        GameTooltip:AddLine(keyword .. ": " .. value)
-    end
+    PrintItemTooltipSummary(data, GameTooltip)
 end
+
 
 local function UpdateSpellTooltip(self)
     local spellID = tostring(select(2, self:GetSpell()))
