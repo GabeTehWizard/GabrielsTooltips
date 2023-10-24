@@ -103,6 +103,9 @@ local function UpdateTooltip()
     tooltipText = string.gsub( tooltipText, "1%% spell reflect", "")
     tooltipText = string.gsub( tooltipText, "2%% intellect", "")
     tooltipText = string.gsub( tooltipText, "%d*%%", "")
+    tooltipText = string.gsub( tooltipText, "haste%,", "")
+    tooltipText = string.gsub( tooltipText, "critical%,", "")
+    tooltipText = string.gsub( tooltipText, "%(1%)", "")
     tooltipText = string.gsub( tooltipText, "5 sec", "")
     tooltipText = string.gsub( tooltipText, "requires level %d+", "")
     tooltipText = string.gsub( tooltipText, "[^%w%s]", "")
@@ -122,9 +125,6 @@ local function UpdateTooltip()
             key = ""
             num = nil
         end
-    end
-    for k, value in pairs(data) do
-        print(k .. value)
     end
     addonData.Utilities.AdjustItemStats(data)
     PrintItemTooltipSummary(data, GameTooltip)
